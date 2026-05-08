@@ -1,0 +1,19 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "description": "Rahul Tamanam's Portfolio",
+  "main": "index.html",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "resend": "^6.0.0"
+  },
+  "keywords": [],
+  "author": "Rahul Tamanam",
+  "license": "ISC"
+}
