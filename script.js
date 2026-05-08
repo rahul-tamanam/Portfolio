@@ -67,7 +67,7 @@ function initVideoLoader() {
   const loader   = document.getElementById('loader');
   const video    = document.getElementById('ld-video');
   const text1    = document.getElementById('ldText1');   // "ENTERING THE UNIVERSE..."
-  const text2    = document.getElementById('ldText2');   // "WELCOME TO MY UNIVERSE"
+  const text2    = document.getElementById('ldText2');   // "WELCOME TO MY PORTFOLIO"
   const boot1    = document.getElementById('ldBoot1');
   const boot2    = document.getElementById('ldBoot2');
   const boot3    = document.getElementById('ldBoot3');
@@ -148,7 +148,7 @@ const TECH_LINKS={
 const PROJECTS=[
   {
     name:'CometBot',
-    category:'Full-Stack',
+    category:'Personal Project',
     desc:'JSOMAdvisor is a full-stack advising app for JSOM graduate programs (MSBA, MSITM), with three assistant workflows: Degree Planner (catalog-based progress + remaining courses + LLM narrative), Career Mentor (role fit + certificate paths), and Skills Gap Analyzer (JD/resume-driven gaps).',
     stack:['Python','FastAPI','Neo4j','Pinecone','TypeScript'],
     demo:'#',
@@ -157,7 +157,8 @@ const PROJECTS=[
   },
   {
     name:'Velox',
-    category:'Full-Stack',
+    category:'Goldman Sachs Hackathon',
+    badge:{ label:'3rd Place', kind:'bronze' },
     desc:'Velox is a localhost-only portfolio workspace for beginner and intermediate investors. It blends plain-English KPIs, macro-aware signals powered by the FRED economic data API, a 1,000-path Monte Carlo simulation engine, and a Macro-Aware Momentum monthly backtest (2020–present) with regime-shaded charts. Ships with a polished React+Vite client, Express+SQLite API, and optional Groq-powered AI assistant.',
     stack:['React','Node/Express','SQLite','Tailwind CSS','Recharts'],
     demo:'#',
@@ -166,7 +167,7 @@ const PROJECTS=[
   },
   {
     name:'PRISM',
-    category:'Full-Stack',
+    category:"FINHACK'26",
     desc:'Beanstalk. Terra. Euler. All had warning signs. PRISM watches for them in real time — six risk pillars, one composite score, one signal: ENTER / HOLD / REDUCE / EXIT. It measures TVL quality (not TVL level) to estimate stress exit liquidity and position sizing risk, updating every 15 minutes from live on-chain data.',
     stack:['React','Python','FastAPI','pandas','numpy','scipy'],
     demo:'#',
@@ -175,7 +176,7 @@ const PROJECTS=[
   },
   {
     name:'ChurnSense',
-    category:'Full-Stack',
+    category:'Personal Project',
     desc:'Most churn models tell you who’s leaving. This one tells you who’s leaving, why they’re leaving, and whether it’s even worth trying to stop them. An end-to-end ML pipeline for detecting, explaining, and acting on subscription churn risk — built on real KKBox behavioral data with synthetic intervention layers.',
     stack:['Python','SQL','XGBoost','FastAPI','React','LLMs'],
     demo:'#',
@@ -184,7 +185,7 @@ const PROJECTS=[
   },
   {
     name:'Prompt Fuzzing Framework',
-    category:'AI Safety',
+    category:'Personal Project',
     desc:'The Prompt Fuzzing Framework automatically mutates, tests, and analyzes prompts against LLMs to uncover unsafe, misaligned, or policy-violating behaviors. Includes a secure sandbox, automated detectors, and a triage interface to benchmark and visualize vulnerabilities.',
     stack:['Python','LLMs','HTML','LMStudio'],
     demo:'#',
@@ -193,7 +194,7 @@ const PROJECTS=[
   },
   {
     name:'PotionWatch',
-    category:'Full-Stack',
+    category:"HACKUTD'26",
     desc:'A real-time system that detects inconsistencies between potion drain data from cauldrons and potion transport tickets reported by witches — using statistical analysis, Flask APIs, and a React dashboard.',
     stack:['React','FastAPI','Flask','CSS'],
     demo:'#',
@@ -202,7 +203,7 @@ const PROJECTS=[
   },
   {
     name:'BreatheEasy',
-    category:'Machine Learning',
+    category:'Undergrad Capstone',
     desc:'Breathe Easy is a deep learning project for respiratory disease classification. It analyzes lung sound recordings by extracting spectrogram features with CNNs and capturing temporal patterns with LSTMs to detect pulmonary conditions.',
     stack:['Python','HTML','CSS'],
     demo:'#',
@@ -211,7 +212,7 @@ const PROJECTS=[
   },
   {
     name:'Loan Predictor',
-    category:'Machine Learning',
+    category:'Personal Project',
     desc:'Machine learning project to automate loan decisioning by predicting approvals and modeling credit risk with classification models and data preprocessing.',
     stack:['Python'],
     demo:'#',
@@ -444,11 +445,24 @@ function buildProjectCards(){
   PROJECTS.forEach((p,i)=>{
     const card=document.createElement('div'); card.className='proj-h-card';
     const tags=p.stack.map(t=>{const url=TECH_LINKS[t];return url?`<a class="pd-stack-tag" href="${url}" target="_blank" rel="noopener">${t}</a>`:`<span class="pd-stack-tag">${t}</span>`;}).join('');
+    const badge = p.badge?.label ? `
+      <div class="proj-h-badge proj-h-badge--${p.badge.kind||'default'}" title="${p.badge.label}">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 2h4l1 4-3 3-3-3 1-4zM13 2h4l1 4-3 3-3-3 1-4z"/>
+          <circle cx="12" cy="15" r="5"/>
+          <path d="M12 12.2l.9 1.8 2 .3-1.4 1.4.3 2-1.8-.9-1.8.9.3-2-1.4-1.4 2-.3.9-1.8z" fill="currentColor" opacity=".95"/>
+        </svg>
+        <span>${p.badge.label}</span>
+      </div>
+    ` : '';
     const demoDisabled=p.demo==='#';
     card.innerHTML=`
       <div class="proj-h-num">${String(i+1).padStart(2,'0')}</div>
       <div class="proj-h-top">
-        <div class="proj-h-category">${p.category}</div>
+        <div class="proj-h-meta">
+          <div class="proj-h-category">${p.category}</div>
+          ${badge}
+        </div>
         <div class="proj-h-name">${p.nameStyle||(()=>{const w=p.name.split(' ');return w.length>1?w[0]+' <span style="color:var(--blue)">'+w.slice(1).join(' ')+'</span>':p.name;})()} </div>
       </div>
       <div class="proj-h-tools-label">Tools and features</div>
@@ -468,8 +482,12 @@ function buildProjectCards(){
       </div>
     `;
     const ss=card.querySelector('.proj-h-screenshot');
-    ss.style.cursor='zoom-in';
-    ss.onclick=()=>window.openScreenshot&&window.openScreenshot(p.screenshot);
+    // Clicking a project should open the full detail view (not just the image lightbox).
+    ss.style.cursor='pointer';
+    ss.onclick=()=>{
+      try { openProjectsFull(); } catch(e) {}
+      try { openDetail(i); } catch(e) {}
+    };
     track.appendChild(card);
   });
   initHorizontalScroll();
