@@ -620,6 +620,17 @@ a.pd-stack-tag { text-decoration: none; cursor: none; }
   html, body { cursor: auto; }
   #cur, #curDot { display: none !important; }
   :root { --nav-h: 56px; }
+  /* Reduce oversized gaps on mobile: keep sections consistently spaced */
+  .scroll-section{
+    min-height: auto;
+    justify-content: flex-start;
+    padding: 3.25rem 1.5rem;
+  }
+  .section-home{
+    min-height: 100vh;
+    justify-content: center;
+    padding: 0 1.5rem;
+  }
   nav { padding: 0 1rem; }
   .nav-email-wrap { display: none; }
   .nav-right { gap: 1rem; }
@@ -633,21 +644,21 @@ a.pd-stack-tag { text-decoration: none; cursor: none; }
   .home-right { padding: 0; text-align: center; }
   .hr-title { text-align: center; }
   .hl-name { font-size: clamp(2.35rem,11.5vw,3.45rem); }
-  .section-about { padding: 4rem 1.5rem; }
+  .section-about { padding: 3.25rem 1.5rem; }
   .ab-big-title { font-size: clamp(2.5rem,12vw,5rem); }
   .ab-quote-text { font-size: .9rem; }
-  .section-techstack { padding: 3rem 1rem; }
+  .section-techstack { padding: 3.25rem 1.5rem; }
   .ab-globe-wrap { height: min(60vw,340px); }
-  .section-strengths { padding: 3rem 1.5rem 4rem; }
+  .section-strengths { padding: 3.25rem 1.5rem; }
   .ab-strengths-grid { grid-template-columns: 1fr; }
   .ab-strength-card { padding: 1.4rem 1.2rem; }
-  .section-projects { padding: 3rem 0 2rem; }
+  .section-projects { padding: 3.25rem 0 2.75rem; }
   .proj-section-header { padding: 0 1.5rem 1.5rem; }
   .proj-hscroll-track { gap: 1.5rem; padding: 1rem 1.5rem 1.5rem; }
   .proj-h-card { width: 80vw; }
   .proj-h-actions { padding-left: 2rem; }
   .proj-see-all-btn { cursor: auto; }
-  .ab-section--contact { padding: 3rem 1.5rem 4rem; }
+  .ab-section--contact { padding: 3.25rem 1.5rem; }
   .contact-form-wrap{margin-bottom:2.2rem;}
   .cf-row{grid-template-columns:1fr;gap:.85rem;}
   .cf-row-msg{grid-template-columns:1fr;align-items:stretch;}

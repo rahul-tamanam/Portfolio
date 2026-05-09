@@ -516,14 +516,18 @@ function initHorizontalScroll(){
     return false;
   }
   function onWheel(e){
-    // Only horizontal-scroll when the user intends horizontal:
-    // - trackpad horizontal gesture (deltaX dominates), OR
-    // - Shift + mouse wheel (common horizontal modifier)
-    const isHorizontalIntent = Math.abs(e.deltaX) > Math.abs(e.deltaY) || e.shiftKey;
-    if(!isHorizontalIntent) return; // let the page scroll vertically
+    // Support both trackpads and mouse wheels:
+    // - Trackpad: deltaX dominates → horizontal scroll
+    // - Mouse wheel: deltaY → map to horizontal while the carousel can still scroll
+    //   (once at start/end, we let the page scroll vertically again)
+    const absX = Math.abs(e.deltaX);
+    const absY = Math.abs(e.deltaY);
+    const intentHorizontal = absX > absY;
+    const delta = intentHorizontal ? e.deltaX : e.deltaY;
 
-    const delta = (Math.abs(e.deltaX) > 0 ? e.deltaX : e.deltaY);
+    // If we can't scroll the carousel in this direction, don't intercept.
     if(!canScroll(delta)) return;
+
     e.preventDefault();
     setPos(hPos + delta*1.5);
   }
