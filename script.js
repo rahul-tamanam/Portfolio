@@ -161,7 +161,7 @@ const PROJECTS=[
     badge:{ label:'3rd Place', kind:'bronze' },
     desc:'Velox is a localhost-only portfolio workspace for beginner and intermediate investors. It blends plain-English KPIs, macro-aware signals powered by the FRED economic data API, a 1,000-path Monte Carlo simulation engine, and a Macro-Aware Momentum monthly backtest (2020–present) with regime-shaded charts. Ships with a polished React+Vite client, Express+SQLite API, and optional Groq-powered AI assistant.',
     stack:['React','Node/Express','SQLite','Tailwind CSS','Recharts'],
-    demo:'#',
+    demo:'https://veloxfolio.vercel.app/',
     github:'https://github.com/rahul-tamanam/Velox',
     screenshot:'images/Velox.png'
   },
@@ -170,7 +170,7 @@ const PROJECTS=[
     category:"FINHACK'26",
     desc:'Beanstalk. Terra. Euler. All had warning signs. PRISM watches for them in real time — six risk pillars, one composite score, one signal: ENTER / HOLD / REDUCE / EXIT. It measures TVL quality (not TVL level) to estimate stress exit liquidity and position sizing risk, updating every 15 minutes from live on-chain data.',
     stack:['React','Python','FastAPI','pandas','numpy','scipy'],
-    demo:'#',
+    demo:'https://defiprism.vercel.app/',
     github:'https://github.com/rahul-tamanam/Prism',
     screenshot:'images/Prism.png'
   },
@@ -179,7 +179,7 @@ const PROJECTS=[
     category:'Personal Project',
     desc:'Most churn models tell you who’s leaving. This one tells you who’s leaving, why they’re leaving, and whether it’s even worth trying to stop them. An end-to-end ML pipeline for detecting, explaining, and acting on subscription churn risk — built on real KKBox behavioral data with synthetic intervention layers.',
     stack:['Python','SQL','XGBoost','FastAPI','React','LLMs'],
-    demo:'#',
+    demo:'https://churnsense-demo.vercel.app/',
     github:'https://github.com/rahul-tamanam/ChurnSense',
     screenshot:'images/ChurnSense.png'
   },
@@ -188,7 +188,7 @@ const PROJECTS=[
     category:'Personal Project',
     desc:'The Prompt Fuzzing Framework automatically mutates, tests, and analyzes prompts against LLMs to uncover unsafe, misaligned, or policy-violating behaviors. Includes a secure sandbox, automated detectors, and a triage interface to benchmark and visualize vulnerabilities.',
     stack:['Python','LLMs','HTML','LMStudio'],
-    demo:'#',
+    demo:null,
     github:'https://github.com/rahul-tamanam/PromptFuzzing',
     screenshot:'images/prompt_fuzzing.png'
   },
@@ -197,7 +197,7 @@ const PROJECTS=[
     category:"HACKUTD'26",
     desc:'A real-time system that detects inconsistencies between potion drain data from cauldrons and potion transport tickets reported by witches — using statistical analysis, Flask APIs, and a React dashboard.',
     stack:['React','FastAPI','Flask','CSS'],
-    demo:'#',
+    demo:null,
     github:'https://github.com/rahul-tamanam/PotionWatch',
     screenshot:'images/PotionWatch.png'
   },
@@ -206,7 +206,7 @@ const PROJECTS=[
     category:'Undergrad Capstone',
     desc:'Breathe Easy is a deep learning project for respiratory disease classification. It analyzes lung sound recordings by extracting spectrogram features with CNNs and capturing temporal patterns with LSTMs to detect pulmonary conditions.',
     stack:['Python','HTML','CSS'],
-    demo:'#',
+    demo:null,
     github:'https://github.com/rahul-tamanam/BreatheEasy',
     screenshot:'images/breatheeasy.jpg'
   },
@@ -215,7 +215,7 @@ const PROJECTS=[
     category:'Personal Project',
     desc:'Machine learning project to automate loan decisioning by predicting approvals and modeling credit risk with classification models and data preprocessing.',
     stack:['Python'],
-    demo:'#',
+    demo:null,
     github:'https://github.com/rahul-tamanam/LoanApprovalPrediction',
     screenshot:'images/loanpred.png'
   },
@@ -455,7 +455,9 @@ function buildProjectCards(){
         <span>${p.badge.label}</span>
       </div>
     ` : '';
-    const demoDisabled=p.demo==='#';
+    const demoBtn=p.demo!=null?`<a class="proj-h-btn proj-h-btn-primary" href="${p.demo}" ${p.demo!=='#'?'target="_blank" rel="noopener"':''} ${p.demo==='#'?'onclick="return false;" style="opacity:.4;pointer-events:none;"':''}>
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Live Demo
+        </a>`:'';
     card.innerHTML=`
       <div class="proj-h-num">${String(i+1).padStart(2,'0')}</div>
       <div class="proj-h-top">
@@ -473,9 +475,7 @@ function buildProjectCards(){
         <div class="proj-h-corner bl"></div><div class="proj-h-corner br"></div>
       </div>
       <div class="proj-h-actions">
-        <a class="proj-h-btn proj-h-btn-primary" href="${p.demo}" ${!demoDisabled?'target="_blank" rel="noopener"':''} ${demoDisabled?'onclick="return false;" style="opacity:.4;pointer-events:none;"':''}>
-          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Live Demo
-        </a>
+        ${demoBtn}
         <a class="proj-h-btn proj-h-btn-outline" href="${p.github}" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.483 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.341-3.369-1.341-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>GitHub
         </a>
@@ -774,7 +774,15 @@ function openDetail(i){
   document.getElementById('pd-name').innerHTML=p.nameStyle||(()=>{const w=p.name.split(' ');return w.length>1?w[0]+' <span style="color:var(--blue)">'+w.slice(1).join(' ')+'</span>':p.name;})();
   document.getElementById('pd-desc').textContent=p.desc;
   document.getElementById('pd-stack').innerHTML=p.stack.map(t=>{const url=TECH_LINKS[t];return url?`<a class="pd-stack-tag" href="${url}" target="_blank" rel="noopener">${t}</a>`:`<span class="pd-stack-tag">${t}</span>`;}).join('');
-  document.getElementById('pd-demo').href=p.demo;
+  const pdDemo=document.getElementById('pd-demo');
+  if(p.demo==null){pdDemo.style.display='none';pdDemo.removeAttribute('href');pdDemo.onclick=null;}
+  else{
+    pdDemo.style.display='';
+    pdDemo.href=p.demo;
+    const dis=p.demo==='#';
+    if(dis){pdDemo.removeAttribute('target');pdDemo.removeAttribute('rel');pdDemo.style.opacity='.4';pdDemo.style.pointerEvents='none';pdDemo.onclick=()=>false;}
+    else{pdDemo.target='_blank';pdDemo.rel='noopener';pdDemo.style.opacity='';pdDemo.style.pointerEvents='';pdDemo.onclick=null;}
+  }
   document.getElementById('pd-github').href=p.github;
   const imgEl=document.getElementById('pd-screenshot-img'),ph=document.getElementById('pd-shot-placeholder');
   if(p.screenshot){imgEl.style.display='block';imgEl.classList.remove('loaded');imgEl.src=p.screenshot;imgEl.onload=()=>imgEl.classList.add('loaded');ph.style.display='none';imgEl.style.cursor='zoom-in';imgEl.onclick=()=>window.openScreenshot&&window.openScreenshot(p.screenshot);}
