@@ -3,6 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { Resend } from "resend";
 import dotenv from "dotenv";
+import { getResendConfig, formatResendError } from "./lib/resend-config.js";
 
 dotenv.config();
 
@@ -17,17 +18,6 @@ app.use(express.static(publicDir));
 
 function isEmail(s) {
   return typeof s === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
-}
-
-function getResendConfig() {
-  const apiKey = process.env.RESEND_API_KEY?.trim();
-  const from =
-    process.env.RESEND_FROM?.trim() ||
-    "Portfolio <onboarding@resend.dev>";
-  const to =
-    process.env.RESEND_TO?.trim() ||
-    process.env.AUTHOR_EMAIL?.trim();
-  return { apiKey, from, to };
 }
 
 app.post("/api/contact", async (req, res) => {
@@ -60,14 +50,14 @@ app.post("/api/contact", async (req, res) => {
     if (error) {
       console.error("Resend API error:", error);
       return res.status(500).json({
-        error: error.message || "Failed to send email.",
+        error: formatResendError(error.message),
       });
     }
     return res.json({ ok: true });
   } catch (e) {
     console.error("Contact send failed:", e);
     return res.status(500).json({
-      error: e?.message || "Failed to send email.",
+      error: formatResendError(e?.message),
     });
   }
 });
