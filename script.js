@@ -280,7 +280,7 @@ function launch() {
     loader.style.display = 'none';
     if (app) { app.style.display = 'block'; app.style.opacity = '0'; }
     initCardThumbs(); buildProjectCards(); initScrollSystem();
-    initScrollReveal(); initGlobe(); buildQuote(); initContactForm(); bindHover(); initCareerLine();
+    initScrollReveal(); initGlobe(); buildQuote(); initContactForm(); initEducationCards(); bindHover(); initCareerLine();
     requestAnimationFrame(() => requestAnimationFrame(() => {
       if (app) { app.style.transition = 'opacity 0.7s ease'; app.style.opacity = '1'; }
     }));
@@ -495,12 +495,28 @@ function buildProjectCards(){
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// HORIZONTAL SCROLL
+// HORIZONTAL SCROLL (desktop: transform + wheel; mobile: native scroll)
 // ═══════════════════════════════════════════════════════════════════
+const MOBILE_SCROLL_MQ = window.matchMedia('(max-width: 600px)');
+
 function initHorizontalScroll(){
   const wrapper=document.getElementById('projHscrollWrapper');
   const track=document.getElementById('projHscrollTrack');
   if(!wrapper||!track)return;
+
+  function useNativeScroll(){
+    return MOBILE_SCROLL_MQ.matches;
+  }
+
+  function enableNative(){
+    wrapper.classList.add('proj-hscroll-native');
+    track.style.transform='';
+  }
+
+  function disableNative(){
+    wrapper.classList.remove('proj-hscroll-native');
+  }
+
   let hPos=0;
   function getMax(){ return Math.max(0,track.scrollWidth-wrapper.clientWidth); }
   function setPos(next){
@@ -515,32 +531,63 @@ function initHorizontalScroll(){
     if(delta<0 && hPos>0) return true;
     return false;
   }
+  function syncMode(){
+    if(useNativeScroll()) enableNative();
+    else { disableNative(); setPos(hPos); }
+  }
   function onWheel(e){
-    // Support both trackpads and mouse wheels:
-    // - Trackpad: deltaX dominates → horizontal scroll
-    // - Mouse wheel: deltaY → map to horizontal while the carousel can still scroll
-    //   (once at start/end, we let the page scroll vertically again)
+    if(useNativeScroll()) return;
     const absX = Math.abs(e.deltaX);
     const absY = Math.abs(e.deltaY);
     const intentHorizontal = absX > absY;
     const delta = intentHorizontal ? e.deltaX : e.deltaY;
-
-    // If we can't scroll the carousel in this direction, don't intercept.
     if(!canScroll(delta)) return;
-
     e.preventDefault();
     setPos(hPos + delta*1.5);
   }
 
-  // Wheel over the wrapper: horizontal intent scrolls the track.
+  syncMode();
   wrapper.addEventListener('wheel', onWheel, {passive:false});
 
-  let tStartX=0,tStartH=0;
-  wrapper.addEventListener('touchstart',e=>{tStartX=e.touches[0].clientX;tStartH=hPos;},{passive:true});
-  wrapper.addEventListener('touchmove',e=>{
-    const dx=tStartX-e.touches[0].clientX;
-    setPos(tStartH+dx);
-  },{passive:true});
+  if(MOBILE_SCROLL_MQ.addEventListener) MOBILE_SCROLL_MQ.addEventListener('change', syncMode);
+  else MOBILE_SCROLL_MQ.addListener(syncMode);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// EDUCATION ACCORDION (touch / mobile — hover is unreliable on phones)
+// ═══════════════════════════════════════════════════════════════════
+function initEducationCards(){
+  const cards=[...document.querySelectorAll('.edu-card')];
+  if(!cards.length) return;
+
+  const EDU_MQ=window.matchMedia('(max-width: 700px)');
+
+  function shouldUseAccordion(){
+    return EDU_MQ.matches || isTouchDevice;
+  }
+
+  function closeAll(except){
+    cards.forEach(c=>{ if(c!==except) c.classList.remove('open'); });
+  }
+
+  cards.forEach(card=>{
+    const header=card.querySelector('.edu-header');
+    if(!header) return;
+    header.addEventListener('click',e=>{
+      if(!shouldUseAccordion()) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const willOpen=!card.classList.contains('open');
+      closeAll(willOpen ? card : null);
+      card.classList.toggle('open', willOpen);
+    });
+  });
+
+  const onMqChange=()=>{
+    if(!shouldUseAccordion()) cards.forEach(c=>c.classList.remove('open'));
+  };
+  if(EDU_MQ.addEventListener) EDU_MQ.addEventListener('change', onMqChange);
+  else EDU_MQ.addListener(onMqChange);
 }
 
 // ═══════════════════════════════════════════════════════════════════

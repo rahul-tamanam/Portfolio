@@ -4,6 +4,17 @@ function isEmail(s) {
   return typeof s === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 }
 
+function getResendConfig() {
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const from =
+    process.env.RESEND_FROM?.trim() ||
+    "Portfolio <onboarding@resend.dev>";
+  const to =
+    process.env.RESEND_TO?.trim() ||
+    process.env.AUTHOR_EMAIL?.trim();
+  return { apiKey, from, to };
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -27,28 +38,35 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Invalid email address." });
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.RESEND_FROM;
-  const to = process.env.RESEND_TO;
-  if (!apiKey || !from || !to) {
+  const { apiKey, from, to } = getResendConfig();
+  if (!apiKey || !to) {
     return res.status(500).json({
       error:
-        "Server is not configured. Set RESEND_API_KEY, RESEND_FROM, and RESEND_TO in Vercel environment variables.",
+        "Server is not configured. Set RESEND_API_KEY and RESEND_TO (or AUTHOR_EMAIL) in Vercel environment variables.",
     });
   }
 
   try {
     const resend = new Resend(apiKey);
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from,
       to,
       replyTo: email,
       subject: `Portfolio message from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\n\n${message}\n`,
     });
+    if (error) {
+      console.error("Resend API error:", error);
+      return res.status(500).json({
+        error: error.message || "Failed to send email.",
+      });
+    }
     return res.json({ ok: true });
-  } catch {
-    return res.status(500).json({ error: "Failed to send email." });
+  } catch (e) {
+    console.error("Contact send failed:", e);
+    return res.status(500).json({
+      error: e?.message || "Failed to send email.",
+    });
   }
 }
 

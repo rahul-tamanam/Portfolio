@@ -654,8 +654,23 @@ a.pd-stack-tag { text-decoration: none; cursor: none; }
   .ab-strength-card { padding: 1.4rem 1.2rem; }
   .section-projects { padding: 3.25rem 0 2.75rem; }
   .proj-section-header { padding: 0 1.5rem 1.5rem; }
+  .proj-hscroll-wrapper.proj-hscroll-native {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  .proj-hscroll-wrapper.proj-hscroll-native::-webkit-scrollbar { display: none; }
+  .proj-hscroll-wrapper.proj-hscroll-native .proj-hscroll-track {
+    transform: none !important;
+    transition: none;
+    will-change: auto;
+  }
   .proj-hscroll-track { gap: 1.5rem; padding: 1rem 1.5rem 1.5rem; }
-  .proj-h-card { width: 80vw; }
+  .proj-h-card { width: 80vw; scroll-snap-align: start; scroll-snap-stop: always; }
   .proj-h-actions { padding-left: 2rem; }
   .proj-see-all-btn { cursor: auto; }
   .ab-section--contact { padding: 3.25rem 1.5rem; }
@@ -665,7 +680,8 @@ a.pd-stack-tag { text-decoration: none; cursor: none; }
   .cf-textarea{grid-column:auto;}
   .cf-send{grid-column:auto;height:50px;width:100%;cursor:auto;}
   .ab-contact-grid { grid-template-columns: 1fr; gap: 2rem; }
-  .ab-contact-right { align-items: flex-start; text-align: left; }
+  .ab-contact-right { align-items: center; text-align: center; width: 100%; }
+  .ab-contact-footer { align-items: center; }
   .ab-contact-email, .ab-contact-social { cursor: auto; }
   #page-projects-full { left: 0; }
   .proj-row { grid-template-columns: 1fr; }
@@ -820,4 +836,10 @@ a.pd-stack-tag { text-decoration: none; cursor: none; }
   .wid-layout{grid-template-columns:1fr;gap:2rem;}
   .wid-title{font-size:clamp(3rem,14vw,5rem)!important;}
   .wid-card{cursor:auto;} .wid-tag{cursor:auto;}
+  .edu-header{cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .edu-card:hover .wid-card-body{max-height:0;opacity:0;margin-top:0;}
+  .edu-card:hover .wid-arrow{transform:none;}
+  .edu-card.open .wid-card-body{max-height:520px;opacity:1;margin-top:.9rem;}
+  .edu-card.open .wid-arrow{transform:rotate(180deg);}
+  .edu-card.open{border-color:rgba(254,189,0,.5);background:rgba(254,189,0,.05);z-index:2;}
 }
