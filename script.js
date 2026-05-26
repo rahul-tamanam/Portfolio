@@ -151,7 +151,7 @@ const PROJECTS=[
     category:'Personal Project',
     desc:'JSOMAdvisor is a full-stack advising app for JSOM graduate programs (MSBA, MSITM), with three assistant workflows: Degree Planner (catalog-based progress + remaining courses + LLM narrative), Career Mentor (role fit + certificate paths), and Skills Gap Analyzer (JD/resume-driven gaps).',
     stack:['Python','FastAPI','Neo4j','Pinecone','TypeScript'],
-    demo:'#',
+    demo:'https://utdcometbot.vercel.app/',
     github:'https://github.com/rahul-tamanam/CometBot',
     screenshot:'images/CometBot.png'
   },
